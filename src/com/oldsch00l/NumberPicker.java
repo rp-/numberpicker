@@ -13,8 +13,6 @@ import android.view.View;
 public class NumberPicker extends View {
 	String TAG = "numberpicker";
 
-	private final long REPEAT_DELAY = 150;
-
 	private final int NONE = 0;
 	private final int INCREASE = 1;
 	private final int DECREASE = 3;
@@ -22,9 +20,10 @@ public class NumberPicker extends View {
 	private static String ns = "http://oldsch00l.com/android/numberpicker";
 
 	private int mDigits = 3; // number of digits shown
-	private int mBoxSize = 40; // cell size
-	private int mTextSize = 28; // text/number size
+	private int mBoxSize = 50; // cell size
+	private int mTextSize = 34; // text/number size
 	private int mMargin = 6; // margin between boxes
+	private long mRepeatDelay = 150;
 
 	private Paint mTextPaint;
 	private int mAscent;
@@ -55,7 +54,11 @@ public class NumberPicker extends View {
 
 	public NumberPicker(Context context, AttributeSet attributeSet) {
 		super(context, attributeSet);
-		mDigits = attributeSet.getAttributeIntValue(ns, "digits", 6);
+		mDigits = attributeSet.getAttributeIntValue(ns, "digits", 3);
+		mBoxSize = attributeSet.getAttributeIntValue(ns, "size", 50);
+		mTextSize = attributeSet.getAttributeIntValue(ns, "textSize", 34);
+		mValue = attributeSet.getAttributeIntValue(ns, "value", 0);
+		mRepeatDelay = attributeSet.getAttributeIntValue(ns, "repeatDelay", 150);
 		init();
 	}
 
@@ -65,7 +68,7 @@ public class NumberPicker extends View {
 		mTextPaint.setTextSize(mTextSize * mScale);
 		mTextPaint.setColor(0xFF000000);
 		setPadding(0, 0, 0, 0);
-		setValue(13);
+		setValue(mValue);
 		mStateIndex = -1;
 		mState = 0;
 		mScaledBoxSize = (int)(mBoxSize * mScale);
@@ -293,13 +296,13 @@ public class NumberPicker extends View {
 			case INCREASE: {
 				increment(mPos);
 				invalidate();
-				repeatUpdateHandler.postDelayed( new RepetetiveUpdater(mState, mPos), REPEAT_DELAY );
+				repeatUpdateHandler.postDelayed( new RepetetiveUpdater(mState, mPos), mRepeatDelay );
 			}
 			break;
 			case DECREASE: {
 				decrement(mPos);
 				invalidate();
-				repeatUpdateHandler.postDelayed( new RepetetiveUpdater(mState, mPos), REPEAT_DELAY );
+				repeatUpdateHandler.postDelayed( new RepetetiveUpdater(mState, mPos), mRepeatDelay );
 			}
 			break;
 			}
