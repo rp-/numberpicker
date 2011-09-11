@@ -23,7 +23,7 @@ public class NumberPicker extends View {
 
 	private int mDigits = 3; // number of digits shown
 	private int mBoxSize = 40; // cell size
-	private int mTextSize = 22; // text/number size
+	private int mTextSize = 28; // text/number size
 	private int mMargin = 6; // margin between boxes
 
 	private Paint mTextPaint;
@@ -62,7 +62,7 @@ public class NumberPicker extends View {
 	public void init() {
 		mTextPaint = new Paint();
 		mTextPaint.setAntiAlias(true);
-		mTextPaint.setTextSize(mTextSize);
+		mTextPaint.setTextSize(mTextSize * mScale);
 		mTextPaint.setColor(0xFF000000);
 		setPadding(0, 0, 0, 0);
 		setValue(13);
