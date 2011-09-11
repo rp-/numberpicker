@@ -19,7 +19,7 @@ public class NumberPicker extends View {
 	private final int INCREASE = 1;
 	private final int DECREASE = 3;
 
-	private static String ns = "http://com.oldsch00l.logbook";
+	private static String ns = "http://oldsch00l.com/android/numberpicker";
 
 	private int mDigits = 3; // number of digits shown
 	private int mBoxSize = 40; // cell size
