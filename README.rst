@@ -40,4 +40,16 @@ Parameters
 digits
   Number of digits to show.
 
+size
+  Size of a cell (+ button, - button, number)
+
+textSize
+  Could be the size of the text
+
+value
+  Initial value to show and edit
+
+repeatDelay
+  The delay between increase or decrease if you hold the button
+
 
