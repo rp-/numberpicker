@@ -13,6 +13,9 @@ import android.view.View;
 public class NumberPicker extends View {
 	String TAG = "numberpicker";
 
+	public final int STYLE_TOP = 0;
+	public final int STYLE_MID = 1;
+
 	private final int NONE = 0;
 	private final int INCREASE = 1;
 	private final int DECREASE = 3;
@@ -29,6 +32,7 @@ public class NumberPicker extends View {
 	private int mAscent;
 	private int mScaledBoxSize;
 	private int mScaledMargin;
+	private int mStyle;
 
 	private int mValue;
 	private StringBuilder mSBValue;
@@ -59,6 +63,7 @@ public class NumberPicker extends View {
 		mTextSize = attributeSet.getAttributeIntValue(ns, "textSize", 34);
 		mValue = attributeSet.getAttributeIntValue(ns, "value", 0);
 		mRepeatDelay = attributeSet.getAttributeIntValue(ns, "repeatDelay", 150);
+		mStyle = attributeSet.getAttributeListValue(ns, "style", new String[] { "top", "mid" }, STYLE_TOP);
 		init();
 	}
 
@@ -179,14 +184,27 @@ public class NumberPicker extends View {
 	protected void onDraw(Canvas canvas) {
 		super.onDraw(canvas);
 
-		drawIncreaseButtons(canvas);
-		drawNumbers(canvas, mScaledBoxSize + 1);
-		drawDecreaseButtons(canvas, mScaledBoxSize * 2 + 2);
+		switch(mStyle)
+		{
+		case STYLE_MID:
+			drawIncreaseButtons(canvas);
+			drawNumbers(canvas, mScaledBoxSize + 1);
+			drawDecreaseButtons(canvas, mScaledBoxSize * 2 + 2);
+		break;
+		default:
+			drawNumbers(canvas);
+			drawIncreaseButtons(canvas, mScaledBoxSize + 1);
+			drawDecreaseButtons(canvas, mScaledBoxSize * 2 + 2);
+		}
 	}
 
 	protected void drawIncreaseButtons(Canvas canvas) {
-		int top = getPaddingTop();
-		int bottom = mScaledBoxSize;
+		drawIncreaseButtons(canvas, 0);
+	}
+
+	protected void drawIncreaseButtons(Canvas canvas, int hOffset) {
+		int top = hOffset;
+		int bottom = hOffset + mScaledBoxSize;
 
 		for(int i = 0; i < mDigits; i++) {
 			int left = i * mScaledBoxSize;
@@ -198,6 +216,10 @@ public class NumberPicker extends View {
 				mDrwBtnPlus.draw(canvas);
 			}
 		}
+	}
+
+	protected void drawNumbers(Canvas canvas) {
+		drawNumbers(canvas, 0);
 	}
 
 	protected void drawNumbers(Canvas canvas, int hOffset) {
@@ -240,7 +262,10 @@ public class NumberPicker extends View {
 	}
 
 	protected Rect getIncreaseBounds() {
-		return new Rect( 0, 0, mScaledBoxSize * mDigits, mScaledBoxSize);
+		if(mStyle == STYLE_MID)
+			return new Rect( 0, 0, mScaledBoxSize * mDigits, mScaledBoxSize);
+		else
+			return new Rect( 0, mScaledBoxSize, mScaledBoxSize * mDigits, mScaledBoxSize * 2);
 	}
 
 	protected Rect getDecreaseBounds() {
